@@ -1,0 +1,52 @@
+# 
+# SOME DESCRIPTIVE TITLE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE 1.0\n"
+"POT-Creation-Date: 2014-09-18 16:11+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+#: .\i18n\page\login.py:8
+msgid "title"
+msgstr ""
+
+#: .\i18n\page\login.py:9
+msgid "h1_strong"
+msgstr ""
+
+#: .\i18n\page\login.py:10
+msgid "h5"
+msgstr ""
+
+#: .\i18n\page\login.py:11
+msgid "remember_me"
+msgstr ""
+
+#: .\i18n\page\login.py:12
+msgid "username"
+msgstr ""
+
+#: .\i18n\page\login.py:13
+msgid "password"
+msgstr ""
+
+#: .\i18n\page\login.py:14
+msgid "forget_password"
+msgstr ""
+
+#: .\i18n\page\login.py:15
+msgid "sign_in"
+msgstr ""
+
+#: .\i18n\page\login.py:16
+msgid "sign_up"
+msgstr ""

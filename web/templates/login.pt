@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="${request.locale_name}" i18n:domain="login">
+  <head>
+    <title i18n:translate="title"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/ico" href="${request.static_url('web:static/img/favicon.ico')}" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="${request.static_url('web:static/css/bootstrap.min.css')}">
+    <link rel="stylesheet" href="${request.static_url('web:static/css/font-awesome.min.css')}">
+    <link rel="stylesheet" href="${request.static_url('web:static/css/bootstrap-checkbox.css')}">
+    <link rel="stylesheet" href="${request.static_url('web:static/css/bootstrap-dropdown-multilevel.css')}">
+    <link rel="stylesheet" href="${request.static_url('web:static/css/minimal.css')}">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="${request.static_url('web:static/js/html5shiv.js')}"></script>
+      <script src="${request.static_url('web:static/js/respond.min.js')}"></script>
+    <![endif]-->
+  </head>
+  <body class="bg-1">
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+      <!-- Make page fluid -->
+      <div class="row">
+        <!-- Page content -->
+        <div id="content" class="col-md-12 full-page login">
+
+
+          <div class="inside-block">
+            <img src="${request.static_url('web:static/img/logo-big.png')}" alt class="logo">
+            <h1><strong i18n:translate="h1_strong"></strong></h1>
+            <h5 i18n:translate="h5"></h5>
+
+            <form id="form-signin" class="form-signin" action="index" method="post">
+              <section>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="username" i18n:attributes="placeholder username" value="${username}">
+                  <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                </div>
+                <div class="input-group">
+                  <input type="password" class="form-control" name="password" i18n:attributes="placeholder password">
+                  <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                </div>
+              </section>
+              <section class="controls">
+                <div class="checkbox check-transparent">
+                  <input type="checkbox" value="1" id="remember" checked>
+                  <label for="remember" i18n:translate="remember_me"></label>
+                </div>
+                <a href="#" i18n:translate="forget_password"></a>
+              </section>
+              <section class="log-in">
+                <button class="btn btn-greensea" i18n:translate="sign_in" type="submit"></button>
+                <span>or</span>
+                <button class="btn btn-slategray" i18n:translate="sign_up"></button>
+              </section>
+            </form>
+          </div>
+
+
+        </div>
+        <!-- /Page content -->  
+      </div>
+    </div>
+    <!-- Wrap all page content end -->
+  </body>
+</html>
+      
