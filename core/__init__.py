@@ -22,7 +22,7 @@ def main(global_config, **settings):
     config.add_translation_dirs("i18n:locale/")
     import web
     web.config(config)
-
+    config.add_route('duty', '/duty')
     config.scan()
     return config.make_wsgi_app()
 

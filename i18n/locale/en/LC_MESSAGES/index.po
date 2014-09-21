@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
 "POT-Creation-Date: 2014-09-16 18:29+0800\n"
-"PO-Revision-Date: 2014-09-16 18:31+0800\n"
+"PO-Revision-Date: 2014-09-22 00:55+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,62 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en\n"
 
-#: .\i18n\page\index.py:6
-msgid "index_greet"
-msgstr "Hi, "
-
 #: .\i18n\page\index.py:7
-msgid "index_sign_in_label"
-msgstr "The time you signed in today is: "
+msgid "title"
+msgstr "Palms com"
+
+#: .\i18n\page\index.py:8
+msgid "com_name_first"
+msgstr "Palms"
+
+#: .\i18n\page\index.py:9
+msgid "com_name_last"
+msgstr "Com"
+
+#: .\i18n\page\index.py:10
+msgid "sunday"
+msgstr "Sun"
+
+#: .\i18n\page\index.py:11
+msgid "monday"
+msgstr "Mon"
+
+#: .\i18n\page\index.py:12
+msgid "tuesday"
+msgstr "Tue"
+
+#: .\i18n\page\index.py:13
+msgid "wednesday"
+msgstr "Wed"
+
+#: .\i18n\page\index.py:14
+msgid "thursday"
+msgstr "Thu"
+
+#: .\i18n\page\index.py:15
+msgid "friday"
+msgstr "Fri"
+
+#: .\i18n\page\index.py:16
+msgid "saturday"
+msgstr "Sat"
+
+#: .\i18n\page\index.py:17
+msgid "duty_title"
+msgstr "Duty situation"
+
+#: .\i18n\page\index.py:18
+msgid "duty_time_label"
+msgstr "Duty time"
+
+#: .\i18n\page\index.py:19
+msgid "duty_yesterday_label"
+msgstr "Yesterday"
+
+#: .\i18n\page\index.py:20
+msgid "duty_check_in"
+msgstr "Check in"
+
+#: .\i18n\page\index.py:21
+msgid "duty_check_all"
+msgstr "Check all"

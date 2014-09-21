@@ -78,36 +78,48 @@
             <ul class="nav navbar-nav quick-actions">
 
               <li class="dropdown divided">
-                  <a class="dropdown-toggle button" data-toggle="dropdown" href="#">
+                  <a class="dropdown-toggle button" data-toggle="dropdown" href="#" onclick="render_duty()">
                     <i class="fa fa-clock-o"></i>
                     <span id= "time-div"></span>
+                    <div style="display: none">
+                      <span name="dayOfWeek" i18n:translate="sunday"></span>
+                      <span name="dayOfWeek" i18n:translate="monday"></span>
+                      <span name="dayOfWeek" i18n:translate="tuesday"></span>
+                      <span name="dayOfWeek" i18n:translate="wednesday"></span>
+                      <span name="dayOfWeek" i18n:translate="thursday"></span>
+                      <span name="dayOfWeek" i18n:translate="friday"></span>
+                      <span name="dayOfWeek" i18n:translate="saturday"></span>
+                    </div>
                   </a>
 
                   <ul class="dropdown-menu wide arrow nopadding bordered">
-                    <li><h1>Duty time situation</h1></li>
+                    <li><h1 i18n:translate="duty_title">Duty time situation</h1></li>
 
                     <li>
                         <a href="#">
                             <div class="task-info">
-                                <div class="desc">Duty Time:</div>
+                                <div class="desc" i18n:translate="duty_time_label">Duty Time</div>
+                                <div id="duty_time"></div>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="#">
                             <div class="task-info">
-                                <div class="desc">Yesterday:</div>
+                                <div class="desc" i18n:translate="duty_yesterday_label">Yesterday</div>
+                                <div id="duty_yesterday"></div>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="#">
                             <div class="task-info">
-                                <div class="desc">Check in:</div>
+                                <div class="desc" i18n:translate="duty_check_in">Check in:</div>
+                                <div id="check_in"></div>
                             </div>
                         </a>
                     </li>
-                    <li><a href="#">Check all  <i class="fa fa-angle-right"></i></a></li>
+                    <li><a href="#" i18n:translate="duty_check_all">Check all  <i class="fa fa-angle-right"></i></a></li>
                   </ul>
               </li>
 
