@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 __author__ = 'palmtale'
 from hashlib import md5
-from core import to_mongo_dict
-from core.avatar import AvatarStorage
+from core import Entity
+from core import Constraint
+
+
+class Account(Entity):
+    def fields(self):
+        return ["_id", "work_id", "username", "password",
+                "display_name", "first_name", "last_name",
+                "gender", "age", "email", "cell_phone_number",
+                "civil_id", "title", "position", "created_at",
+                "updated_at"]
 
 
 class AccountSurface:
@@ -14,56 +23,14 @@ class AccountSurface:
 class AccountService:
     def __init__(self):
         self.__storage = AccountStorage()
-        self.__avatar_storage = AvatarStorage()
 
     def find_out_account(self, user_identity, password):
-        user_identities = [{'username': user_identity},
-                           {'email': user_identity},
-                           {'cell_phone_number': user_identity}]
         password = md5(bytes(password, 'utf8')).hexdigest().upper()
-        dict_condition = {'password': password, '$or': user_identities}
-        return self.__storage.retrieve_as_dict_condition(dict_condition)
-
-
-class Account:
-    id = None
-    work_id = None
-    username = None
-    password = None
-    display_name = None
-    first_name = None
-    last_name = None
-    gender = None
-    age = None
-    email = None
-    cell_phone_number = None
-    civil_id = None
-    title = None
-    position = None
-    create_at = None
-    update_at = None
-
-
-def new_account_from_dict(dict_):
-    account = Account()
-    if dict_ is not None and isinstance(dict_, dict):
-        account.id = dict_.get('id', None)
-        account.work_id = dict_.get('work_id', None)
-        account.username = dict_.get('username', None)
-        account.password = dict_.get('password', None)
-        account.display_name = dict_.get('display_name', None)
-        account.first_name = dict_.get('first_name', None)
-        account.last_name = dict_.get('last_name', None)
-        account.gender = dict_.get('gender', None)
-        account.age = dict_.get('age', None)
-        account.email = dict_.get('email', None)
-        account.cell_phone_number = dict_.get('cell_phone_number', None)
-        account.civil_id = dict_.get('civil_id', None)
-        account.title = dict_.get('title', None)
-        account.position = dict_.get('position', None)
-        account.create_at = dict_.get('create_at', None)
-        account.update_at = dict_.get('update_at', None)
-    return account
+        c = Constraint('username', '=', user_identity)
+        c |= Constraint('email', '=', user_identity)
+        c |= Constraint('cell_phone_number', '=', user_identity)
+        c &= Constraint('password', '=', password)
+        return self.__storage.retrieve_as_constraint(c)
 
 
 #Mongo:
@@ -72,15 +39,10 @@ class AccountStorage:
         from core import mongo_db
         self.__mongo = mongo_db.account
 
-    def create(self, account):
-        assert not self.exist_same_unique_field(account), "Some account identity field is duplicated"
-        account.id = None
-        from datetime import datetime
-        account.create_at = datetime.now()
-        account.update_at = account.create_at
-        return self.__mongo.insert(account.__dict__)
-
-    def exist_same_unique_field(self, account):
+    def exist_same_unique_field(self, _account_):
+        account = _account_
+        if isinstance(_account_, dict):
+            account = Account(_account_)
         conditions = list()
         if account.work_id is not None and account.work_id.strip() is not "":
             conditions.append({'work_id': account.work_id})
@@ -97,30 +59,35 @@ class AccountStorage:
         else:
             return True
 
-    def retrieve(self, account):
-        assert isinstance(account, Account), "Parameter account is incorrect type, should be Account"
-        account_dict = self.__mongo.find_one(to_mongo_dict(account))
-        if account_dict is not None:
-            account_dict['id'] = account_dict.get('_id')
-            del account_dict['_id']
-            return new_account_from_dict(account_dict)
-        return None
+    def create(self, account):
+        assert isinstance(account, Account), "Parameter 'account' type error, should be core.Account"
+        assert account.id is None, "Id should be none for creating entity"
+        from datetime import datetime
+        account.created_at = datetime.now()
+        account.updated_at = datetime.now()
+        self.__mongo.insert(account.__dict__)
+        return account
 
-    def retrieve_as_dict_condition(self, dict_conditioin):
-        assert isinstance(dict_conditioin, dict), "Parameter dict_condition should be type dict"
-        account_dict = self.__mongo.find_one(dict_conditioin)
-        if account_dict is not None:
-            account_dict['id'] = account_dict.get('_id')
-            del account_dict['_id']
-            return new_account_from_dict(account_dict)
-        return None
+    def retrieve(self, key="_id", value=None):
+        account_dict = {key: value}
+        self.__mongo.find_one(account_dict)
+        return Account(account_dict)
 
-    def delete(self, account):
-        assert isinstance(account, Account), "Parameter account is incorrect type, should be Account"
-        return self.__mongo.remove(to_mongo_dict(account))
+    def retrieve_as_constraint(self, constraint):
+        assert isinstance(constraint, Constraint), "Parameter dict_condition should be type core.constraint"
+        constraint_dict = constraint.value.copy()
+        self.__mongo.find_one(constraint_dict)
+        return Account(constraint_dict)
 
     def update(self, account):
-        assert isinstance(account, Account), "Parameter account is incorrect type, should be Account"
-        import time
-        account.update_at = time.time()
-        return self.__mongo.update(to_mongo_dict(account))
+        assert isinstance(account, Account), "Parameter 'account' type error, should be core.Account"
+        assert account.id is not None, "Cannot update for not exist account"
+        from datetime import datetime
+        account.updated_at = datetime.now()
+        self.__mongo.update({'_id': account.id}, account.__dict__)
+        return account
+
+    def delete(self, account):
+        assert isinstance(account, Account), "Parameter 'account' type error, should be core.Account"
+        self.__mongo.remove(account.__dict__)
+        return account

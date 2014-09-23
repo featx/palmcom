@@ -12,4 +12,5 @@ def config(config):
     # routes
     config.add_route('index', '/index')
     config.add_route('login', '/in.log')
+    config.add_route('duties', '/duties')
     config.scan()

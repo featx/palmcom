@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'palmtale'
-from core import MONGO_ID_STR
+from core import Entity
+
+
+class Profile(Entity):
+    def fields(self):
+        return ["_id", "whose", "avatar", "work_start", "work_end", "created_at", "updated_at"]
 
 
 class ProfileService:
@@ -9,45 +14,22 @@ class ProfileService:
 
     def find_work_time(self, account_id):
         work_time = self.__storage.retrieve_work_time(account_id)
-        if work_time is None:
-            work_time = dict()
-        else:
-            work_time['work_start'] = work_time.get('work_start').time()
-            work_time['work_end'] = work_time.get('work_end').time()
+        from datetime import datetime
+        for k, v in work_time.items():
+            if not isinstance(v, datetime):
+                continue
+            work_time[k] = v.time()
         return work_time
 
     def set_work_time(self, account_id, start, end):
-        profile = self.__storage.retrieve(str(account_id))
+        profile = self.__storage.retrieve(key='whose', value=str(account_id))
         if profile is None:
             profile = Profile()
-        profile.whose = str(account_id)
+            profile.whose = str(account_id)
         from datetime import datetime
         profile.work_start = datetime.strptime(start, "%H:%M:%S").time()
         profile.work_end = datetime.strptime(end, "%H:%M:%S").time()
-        self.__storage.create(profile)
-
-
-class Profile:
-    id = None
-    whose = None
-    avatar = None
-    work_start = None
-    work_end = None
-    created_at = None
-    updated_at = None
-
-
-def new_profile_from_dict(dict_):
-    profile = Profile()
-    if dict_ is not None and isinstance(dict_, dict):
-        profile.id = dict_.get('id', None)
-        profile.avatar = dict_.get('avatar', None)
-        profile.whose = dict_.get('whose', None)
-        profile.work_start = dict_.get("work_start", None)
-        profile.work_end = dict_.get("work_end", None)
-        profile.create_at = dict_.get('create_at', None)
-        profile.update_at = dict_.get('update_at', None)
-    return profile
+        self.__storage.create_or_update(profile)
 
 
 class ProfileStorage:
@@ -56,29 +38,46 @@ class ProfileStorage:
         self.__mongo = mongo_db.profile
 
     def create(self, profile):
-        assert self.retrieve(profile.whose) is None, "Some serialize field is existed"
-        profile.id = None
+        assert isinstance(profile, Profile), "Parameter 'profile' type error, should be core.Profile"
         from datetime import datetime
-        profile.create_at = datetime.now()
-        profile.update_at = profile.create_at
-        return self.__mongo.insert(profile.__dict__)
+        profile.timestamp = datetime.now()
+        self.__mongo.insert(profile.__dict__)
+        return profile
 
-    def retrieve(self, account_id):
-        _dict_ = self.__mongo.find({'whose': account_id})
-        if _dict_ is not None:
-            _dict_['id'] = _dict_.get('_id')
-            del _dict_['_id']
-            return new_profile_from_dict(_dict_)
-        return None
+    def retrieve(self, key='_id', value=None):
+        profile_dict = {key: value}
+        self.__mongo.find_one(profile_dict)
+        return Profile(profile_dict)
 
     def retrieve_avatar(self, account_id):
-        result = self.__mongo.find({'whose': account_id}, {MONGO_ID_STR: False, 'avatar': True})
+        result = self.__mongo.find({'whose': account_id}, {'_id': False, 'avatar': True})
         return result[0]['avatar']
 
     def retrieve_work_time(self, account_id):
         result_set = self.__mongo.find({'whose': account_id},
-                                       {MONGO_ID_STR: False, 'work_start': True, 'work_end': True})
+                                       {'_id': False, 'work_start': True, 'work_end': True})
         if result_set is None or result_set.count() is 0:
-            return None
+            return dict()
         else:
             return result_set[0]
+
+    def update(self, profile):
+        assert isinstance(profile, Profile), "Parameter 'sign' type error, should be core.Sign"
+        assert profile.id is not None, "Cannot update for not exist profile"
+        from datetime import datetime
+        profile.updated_at = datetime.now()
+        self.__mongo.update({'_id': profile.id}, profile.__dict__)
+        return profile
+
+    def delete(self, profile):
+        assert isinstance(profile, Profile), "Parameter 'sign' type error, should be core.Sign"
+        self.__mongo.delete(profile.__dict__)
+        return profile
+
+    def create_or_update(self, profile):
+        assert isinstance(profile, Profile), "Parameter 'sign' type error, should be core.Sign"
+        if profile.id is None:
+            return self.create(profile)
+        else:
+            return self.update(profile)
+

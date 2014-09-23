@@ -12,7 +12,7 @@ requires = [
     'pyramid',
     'Babel',
     'lingua',
-    'pymongo',
+    'mongoengine',
     'pyramid_chameleon',
     'waitress']
 
