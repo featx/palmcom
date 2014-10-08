@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'palmtale'
 from datetime import timedelta
-from datetime import time
 from datetime import datetime
 
 from pyramid.view import view_config

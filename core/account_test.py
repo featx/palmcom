@@ -2,54 +2,45 @@
 __author__ = 'palmtale'
 
 import unittest
-from core import account as _account
+from hashlib import md5
+
+from mongoengine import *
+from mongoengine.context_managers import switch_db
+
+from core.account import Account as _Account
+from core.account import AccountService
 
 
-class AccountMongoTest(unittest.TestCase):
+class AccountTest(unittest.TestCase):
     def setUp(self):
-        import core
-        from pymongo import MongoClient
-        mongo_client = MongoClient()
-        core.mongo_db = mongo_client.palms_test
-        core.mongo_db.authenticate("test", "test")
-        self.__storage = _account.AccountStorage()
+        connect('palms', username='palms', password='palms')
+        connect('palms_test', alias="test", username='test', password='test')
 
     def tearDown(self):
-        import core
-        core.mongo_db.drop_collection('account')
+        with switch_db(_Account, 'test') as Account:
+            Account.drop_collection()
+        a = AccountService.find_out_account("2014090801", '123456')
+        if a is None:
+            _Account(work_id="2014090801", username="palmtale", email="palmtale@live.com",
+                     cell_phone_number="13303030033",
+                     password=md5(bytes('123456', 'utf8')).hexdigest().upper()).save()
 
-    def test_create_retrieve(self):
-        account = _account.Account()
-        account.work_id = "20140918101"
-        account.display_name = "月里年"
-        account.cell_phone_number = "17601230009"
-        account.first_name = "Cartoon"
-        account.last_name = "张"
-        account.age = 29
-        account.gender = "男"
-        account.position = "Java 软件工程师"
-        account.title = "员工"
-        account.email = "cartoon.zhang@dgd.com"
-        account.civil_id = "019043243112321321"
-        self.__storage.create(account)
-        account = _account.Account()
-        account.work_id = "20140918101"
-        account = self.__storage.retrieve(account)
-        self.assertIsNotNone(account.id, "Wrong")
+    def test(self):
+        with switch_db(_Account, 'test') as Account:
+            account = Account(work_id="201401204", username="palmtale", email="palmtale@live.com",
+                              cell_phone_number="13300130013")
+            password = "123456"
+            account.password = md5(bytes(password, "utf8")).hexdigest().upper()
+            account.save()
+            a = AccountService.find_out_account("201401204", "123456")
+            self.assertEqual(account.id, a.id)
+            aa = AccountService.find_out_account("palmtale", "123456")
+            self.assertEqual(account.id, aa.id)
+            aaa = AccountService.find_out_account("palmtale@live.com", "123456")
+            self.assertEqual(account.id, aaa.id)
+            aaaa = AccountService.find_out_account("13300130013", "123456")
+            self.assertEqual(account.id, aaaa.id)
 
-    def test_exist(self):
-        account = _account.Account()
-        account.work_id = "20140918101"
-        account.username = "pad"
-        account.email = "dfda@fd.com"
-        account.cell_phone_number = "17611441145"
-        self.__storage.create(account)
-        account.username = ""
-        account.email = ""
-        account.cell_phone_number = ""
-        self.assertTrue(self.__storage.exist_same_unique_field(account))
-        account.work_id = "20140918102"
-        self.assertFalse(self.__storage.exist_same_unique_field(account))
 
 if __name__ == "__main__":
     unittest.main()

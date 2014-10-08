@@ -39,3 +39,9 @@ function render_duty() {
         $('#check_in')[0].innerHTML = (duty.today_start)
     }})
 }
+
+function render_duties() {
+    $.ajax({url: 'duties', method: 'post', success: function(content_dom){
+        $('#content')[0].innerHTML = content_dom
+    }})
+}

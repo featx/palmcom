@@ -119,7 +119,7 @@
                             </div>
                         </a>
                     </li>
-                    <li><a href="duties" i18n:translate="duty_check_all">Check all  <i class="fa fa-angle-right"></i></a></li>
+                    <li><a href="#" i18n:translate="duty_check_all" onclick="render_duties()">Check all  <i class="fa fa-angle-right"></i></a></li>
                   </ul>
               </li>
 
@@ -316,7 +316,7 @@
                 <ul class="menu">
                   
                   <li class="active">
-                    <a href="index.html">
+                    <a href="index">
                       <i class="fa fa-tachometer"></i> Dashboard
                       <span class="badge badge-red">1</span>
                     </a>
@@ -655,17 +655,8 @@
             </ul>
             <!-- Sidebar end -->
 
-
-
-
-
           </div>
           <!--/.nav-collapse -->
-
-
-
-
-
         </div>
         <!-- Fixed navbar end -->
         <!-- Page content -->
@@ -675,15 +666,15 @@
           <div class="pageheader">
             
 
-            <h2><i class="fa fa-tachometer"></i> Dashboard
-            <span>// Place subtitle here...</span></h2>
+            <h2><i class="fa fa-home"></i> <strong i18n:translate="content_title">Dashboard</strong>
+            <span i18n:translate="content_subtitle">// Place subtitle here...</span></h2>
             
 
             <div class="breadcrumbs">
               <ol class="breadcrumb">
-                <li>You are here</li>
-                <li><a href="index">Minimal</a></li>
-                <li class="active">Dashboard</li>
+                <li i18n:translate="site_map_prompt">You are here</li>
+                <li><a href="index" i18n:translate="site_map_index">Minimal</a></li>
+                <li class="active" i18n:translate="site_map_home">Home</li>
               </ol>
             </div>
           </div>

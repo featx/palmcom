@@ -42,4 +42,3 @@ class ProfileService:
         work_end = datetime.strptime(end, "%H:%M:%S")
         Profile.objects.only('id').get_or_create(whose=account)
         Profile.objects(whose=account).update_one(set__work_start=work_start, set__work_end=work_end)
-
